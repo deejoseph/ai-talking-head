@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+
+# models / weights
+gfpgan/weights/
+sadtalker/checkpoints/
+*.pth
+*.safetensors
+*.tar
+
+# 输出文件
+outputs/
+
+# Env
+.env
+venv/
+conda/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 模型权重（必须忽略）
+gfpgan/weights/
+checkpoints/
+*.pth
+*.tar
+*.safetensors
