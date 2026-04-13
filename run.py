@@ -42,6 +42,21 @@ def _get_env_bool(key: str, default: bool) -> bool:
 
 
 def _run_and_stream(cmd, cwd):
+    def _safe_stdout_write(text: str) -> None:
+        try:
+            sys.stdout.write(text)
+            return
+        except UnicodeEncodeError:
+            pass
+
+        out_enc = sys.stdout.encoding or "utf-8"
+        safe_bytes = text.encode(out_enc, errors="replace")
+        if hasattr(sys.stdout, "buffer"):
+            sys.stdout.buffer.write(safe_bytes)
+            sys.stdout.flush()
+        else:
+            sys.stdout.write(safe_bytes.decode(out_enc, errors="replace"))
+
     print(f"[RUN] {' '.join(cmd)}")
     proc = subprocess.Popen(
         cmd,
@@ -54,7 +69,7 @@ def _run_and_stream(cmd, cwd):
     )
     assert proc.stdout is not None
     for line in proc.stdout:
-        sys.stdout.write(line)
+        _safe_stdout_write(line)
     return proc.wait()
 
 
