@@ -27,3 +27,48 @@ checkpoints/
 *.pth
 *.tar
 *.safetensors
+
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+
+# ===== Env =====
+.env
+.venv/
+
+# ===== Cache =====
+.cache/
+.tmp/
+*.log
+
+# ===== Data (非常关键) =====
+inputs/*
+outputs/*
+temp/*
+
+# 但保留目录结构
+!inputs/.gitkeep
+!outputs/.gitkeep
+
+# ===== Models =====
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+Wav2Lip/
+Wav2Lip/checkpoints/
+sadtalker/checkpoints/
+
+# ===== Media =====
+*.mp4
+*.avi
+*.mov
+*.wav
+*.png
+*.jpg
+*.jpeg
+
+# ===== Notebook =====
+*.ipynb
+
