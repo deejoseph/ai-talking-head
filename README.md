@@ -1,97 +1,104 @@
-﻿# 馃幀 AI Talking Head Pipeline
+﻿# PixelSmile AI Talking Head Pipeline
 
-## UI Preview
+## UI 预览
 
 ![UI](UI.png)
 
+## 项目简介
 
-A fully automated pipeline to generate talking head videos from text, using:
+这是一个在本地运行的数字人视频生成管线，核心流程为：
 
-- 馃 SadTalker (AI talking head generation)
-- 馃攰 TTS (text-to-speech)
-- 馃帪 FFmpeg (video post-processing)
-
----
-
-## 馃殌 Features
-
-- End-to-end pipeline: **Text 鈫?Audio 鈫?Talking Video**
-- Works locally (Windows + GPU)
-- Compatible with Kaggle environment
-- Automatic video formatting (vertical / social media ready)
-- Modular design for future expansion
+1. 输入人像图片 + 音频（WAV）
+2. SadTalker 生成人脸驱动视频
+3. （可选）Wav2Lip 做口型增强
+4. 输出最终视频文件
 
 ---
 
-## 馃搨 Project Structure
+## 当前能力
+
+- Gradio 可视化界面（上传、调参、生成、下载）
+- 多组参数预设（推荐 / Kaggle-like / 稳定头部）
+- 支持 SadTalker + GFPGAN 增强
+- 支持切换是否启用 Wav2Lip
+- 全流程在项目目录内运行（D 盘）
+
+---
+
+## 目录结构
+
+```text
 ai_video_pipeline/
-鈹溾攢鈹€ run.py # Main entry point
-鈹溾攢鈹€ config.py # Configurations
-鈹溾攢鈹€ inputs/ # Input assets
-鈹?鈹溾攢鈹€ face.png
-鈹?鈹斺攢鈹€ audio.wav
-鈹溾攢鈹€ outputs/ # Generated videos
-鈹溾攢鈹€ sadtalker/ # SadTalker source code
-鈹溾攢鈹€ tts/ # TTS module
-鈹斺攢鈹€ gfpgan/ # Face enhancement models
-
-## 馃斀 Model Download
-
-Due to GitHub file size limits, model files are not included.
-
-Please download manually:
-
-- SadTalker:
-  https://github.com/OpenTalker/SadTalker/releases
-
-- GFPGAN weights will be downloaded automatically on first run.
-
-Place them under:
-
-sadtalker/checkpoints/
-
-## 鈿欙笍 Requirements
-
-- Python 3.10 (recommended)
-- NVIDIA GPU (tested on RTX 3070 / T4)
-- CUDA-compatible PyTorch
+├─ app.py                 # Gradio 界面入口
+├─ run.py                 # 推理主流程
+├─ run_pipeline.bat       # Windows 启动脚本
+├─ inputs/                # 输入文件目录
+├─ outputs/               # 输出文件目录
+│  └─ sadtalker_runs/     # SadTalker 中间结果
+├─ sadtalker/             # SadTalker 代码与模型目录
+├─ Wav2Lip/               # Wav2Lip 代码与模型目录
+├─ UI.png                 # 界面截图
+└─ README.md
+```
 
 ---
 
-## 馃敡 Installation
+## 环境要求
+
+- Windows
+- Python 3.10（建议 Conda 环境）
+- NVIDIA GPU（已在 RTX 3070 测试）
+
+---
+
+## 安装
 
 ```bash
 conda create -n pixel_ai python=3.10
 conda activate pixel_ai
-
 pip install -r requirements.txt
+pip install gradio
+```
 
-鈻讹笍 Usage
-python run.py
+---
 
-Pipeline will:
+## 使用方式
 
-Generate audio from text
-Run SadTalker to create talking head video
-Optimize video using ffmpeg
-馃摴 Output
+### 1) 启动界面
 
-Generated videos will be saved in:
+双击或命令行运行：
 
-outputs/
-鈿狅笍 Notes
-Some dependencies are sensitive to versions:
-numpy < 2.0
-torchvision compatibility required
-First run may download model weights automatically
-馃 Future Improvements
-Better lip-sync quality (Wav2Lip integration)
-Emotion / expression control
-Web UI (Gradio / Flask)
-Batch generation support
-馃懁 Author
+```bat
+run_pipeline.bat
+```
 
-Joseph Dee
+启动后访问：
 
-猸?If this project helps you, feel free to star the repo!
+- http://127.0.0.1:7860
 
+### 2) 在界面中操作
+
+1. 上传图片与 WAV 音频
+2. 选择预设或手动调参
+3. 点击 `Generate`
+4. 在界面中预览并下载输出视频
+
+---
+
+## 模型说明
+
+本仓库不直接附带全部大模型权重。请按对应项目说明下载并放置到：
+
+- `sadtalker/checkpoints/`
+- `Wav2Lip/checkpoints/`
+
+---
+
+## 说明
+
+如果你看到异常报错，优先检查：
+
+- 当前是否激活 `pixel_ai` 环境
+- `gradio` 是否安装在该环境
+- 输入文件是否为有效图片与 WAV 音频
+- 模型权重是否齐全
